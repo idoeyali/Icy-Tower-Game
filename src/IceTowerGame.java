@@ -6,6 +6,9 @@ import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class IceTowerGame extends Application {
 
     private Pane gamePane;  // This is the main game area (where we'll add game elements like player and platforms)
@@ -28,6 +31,7 @@ public class IceTowerGame extends Application {
         gamePane.getChildren().add(background);  // Add background to the game pane
 
         addPlayer();
+        addInitialPlatforms();
 //        addInitialPlatforms();
 //        Rectangle debugRectangle = new Rectangle(100, 100, Color.RED);
 //        gamePane.getChildren().add(debugRectangle);  // Add a red rectangle for debugging
@@ -73,7 +77,7 @@ public class IceTowerGame extends Application {
     }
 
     private void addPlayer() {
-        player = new Player(WINDOW_WIDTH / 2 - 25, WINDOW_HEIGHT - 100);
+        player = new Pikachu((double) WINDOW_WIDTH / 2 - 25, WINDOW_HEIGHT - 100);
         gamePane.getChildren().add(player.getImageView());
     }
 
@@ -88,10 +92,65 @@ public class IceTowerGame extends Application {
         };
         gameLoop.start();  // Start the loop
     }
+    private List<Platform> platforms;
 
+    private void addInitialPlatforms() {
+        platforms = new ArrayList<>();
+
+        // Create some sample platforms at different positions
+        Platform platform1 = new Platform(100, 450, 200, 20,"/util/plat.jpg"); // x, y, width, height
+        Platform platform2 = new Platform(300, 300, 200, 20,"/util/plat.jpg");
+        Platform platform3 = new Platform(600, 150, 200, 20,"/util/plat.jpg");
+        Platform platform4 = new Platform(600, 350, 200, 20,"/util/plat.jpg");
+
+        platforms.add(platform1);
+        platforms.add(platform2);
+        platforms.add(platform3);
+        platforms.add(platform4);
+
+        // Add the platforms to the game pane
+        for (Platform platform : platforms) {
+            gamePane.getChildren().add(platform.getImageView());
+        }
+    }
     // This method will update the game state in each frame
     private void update() {
         // Here, we'll later handle player movement, platform updates, etc.
+
+        boolean isPlayerOnPlatform = false;
+        for (Platform platform : platforms) {
+//            if (platform.isPlayerBeneathPlatform(player)){
+//                player.stopVerticalMovement();
+//            }
+            if (platform.isPlayerOnPlatform(player)) {
+                player.getImageView().setTranslateY(platform.getImageView().getTranslateY() - player.getImageView().getFitHeight());
+                player.setOnGround(true); // Set the player to be on the ground (on the platform)
+                isPlayerOnPlatform = true;
+                player.stopVerticalMovement(); // Stop falling when on the platform
+                break; // Stop downward movement
+            }
+        }
+//        System.out.println(isPlayerOnPlatform);
+        // If not on a platform, check for jumping into one
+        if (!isPlayerOnPlatform) {
+            for (Platform platform : platforms) {
+                if (platform.isPlayerJumpingInto(player)) {
+                    // If jumping into a platform, stop upward movement
+//                    player.getImageView().setTranslateY(platform.getImageView().getTranslateY() - player.getImageView().getFitHeight());
+                    player.stop(); // Prevent the player from moving upwards
+                    player.setOnGround(false); // Set player to on ground (platform)
+                    isPlayerOnPlatform = true; // Set flag
+                    break; // Exit loop, player collided with platform
+                }
+            }
+        }
+
+        // Apply gravity if the player is not on any platform
+        if (!isPlayerOnPlatform) {
+            player.setOnGround(false);
+            player.applyGravity(); // Apply gravity if falling
+        }
+
         player.update();
     }
 
