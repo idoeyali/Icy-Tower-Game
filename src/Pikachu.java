@@ -1,9 +1,9 @@
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class Pikachu extends Player{
-    public Pikachu(double startX, double startY) {
-        super(startX, startY);
+public class Pikachu extends Player {
+    public Pikachu(double startX, double startY, double screenWidth) {
+        super(startX, startY, screenWidth);
         initializeImage(startX, startY);
     }
 

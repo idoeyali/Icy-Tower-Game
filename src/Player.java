@@ -7,44 +7,57 @@ public abstract class Player {
     private double gravity;               // Gravity effect
     private double jumpStrength;          // Strength of the jump
     private boolean onGround;             // Flag to check if the player is on the ground
-    private double velocityX;             // Horizontal velocity
+    private double velocityX;
+    private final double screenWidth;// Horizontal velocity
+
 
     // Constructor
-    public Player(double startX, double startY) {
+    public Player(double startX, double startY, double screenWidth) {
+        this.screenWidth = screenWidth;
         this.gravity = 1.0;
         this.jumpStrength = -20.0;
         this.onGround = false;
         this.velocityY = 0;
         this.velocityX = 0;  // Initialize horizontal velocity
     }
+
     protected abstract void initializeImage(double startX, double startY);
+
     public ImageView getImageView() {
         return playerImageView;
     }
+
     public void stopVerticalMovement() {
         if (velocityY > 0) { // Stop movement only when falling (positive velocity)
             velocityY = 0;
         }
     }
+
     public void applyGravity() {
         if (!onGround) {
             velocityY += gravity;
         }
     }
-    public void stop(){
-        velocityY=0;
+
+    public void stop() {
+        velocityY = 0;
     }
+
     public void update() {
         // Update the player's position based on vertical and horizontal velocities
         playerImageView.setTranslateY(playerImageView.getTranslateY() + velocityY);
         playerImageView.setTranslateX(playerImageView.getTranslateX() + velocityX);
+        playerOutOfBoundsHandler();
+    }
 
-        // Check for ground collision
-        if (playerImageView.getTranslateY() >= 500) { // Adjust ground level as needed
-            playerImageView.setTranslateY(500);
-            onGround = true;  // Player is on the ground
-            velocityY = 0;    // Reset vertical velocity
+    private void playerOutOfBoundsHandler() {
+        if (playerImageView.getTranslateX() < 0) {
+            playerImageView.setTranslateX(0);
         }
+        if (playerImageView.getTranslateX() > screenWidth) {
+            playerImageView.setTranslateX(screenWidth);
+        }
+
     }
 
     public void jump() {
@@ -61,9 +74,11 @@ public abstract class Player {
     public void stopMoving() {
         velocityX = 0; // Stop horizontal movement
     }
+
     public boolean isOnGround() {
         return onGround;
     }
+
     public void setOnGround(boolean onGround) {
         this.onGround = onGround;
     }
