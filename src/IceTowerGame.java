@@ -18,9 +18,10 @@ public class IceTowerGame extends Application {
     private Scene gameScene;
 
     private Player player;
+    private ImageView startingBackground;
+    private ImageView skyBackground;
+    private ImageView gameEndedImageView;
 
-    private ImageView background;
-    private ImageView background2;
     private List<Platform> platforms;
     private boolean firstBackgroundScrollComplete = false; //TODO
 
@@ -31,18 +32,7 @@ public class IceTowerGame extends Application {
         // Initialize the game pane (the root node of our game scene)
         gamePane = new Pane();
 
-        //Adding game background
-        Image backgroundImage = new Image("/util/sky2.jpg");
-        background = new ImageView(backgroundImage);
-        background.setFitWidth(WINDOW_WIDTH);
-        background.setFitHeight(WINDOW_HEIGHT);
-
-        Image skyBackgroundImage = new Image("/util/sky22.jpg");
-        background2 = new ImageView(skyBackgroundImage);
-        background2.setFitWidth(WINDOW_WIDTH);
-        background2.setFitHeight(WINDOW_HEIGHT);
-        background2.setTranslateY(-WINDOW_HEIGHT);
-        gamePane.getChildren().addAll(background,background2);  // Add background to the game pane
+        initializedBackground();
 
         addPlayer();
         addInitialPlatforms();
@@ -60,6 +50,28 @@ public class IceTowerGame extends Application {
 
         // Start the game loop (handles continuous updates like movement, collision, etc.)
         startGameLoop();
+    }
+
+    private void initializedBackground() {
+        //Adding game background
+        Image backgroundImage = new Image("/util/sky2.jpg");
+        startingBackground = new ImageView(backgroundImage);
+        startingBackground.setFitWidth(WINDOW_WIDTH);
+        startingBackground.setFitHeight(WINDOW_HEIGHT);
+
+        Image skyBackgroundImage = new Image("/util/sky22.jpg");
+        skyBackground = new ImageView(skyBackgroundImage);
+        skyBackground.setFitWidth(WINDOW_WIDTH);
+        skyBackground.setFitHeight(WINDOW_HEIGHT);
+        skyBackground.setTranslateY(-WINDOW_HEIGHT);
+        gamePane.getChildren().addAll(startingBackground, skyBackground);  // Add background to the game pane
+
+        Image gameEndedImage = new Image("/util/game_ended.jpg");
+        gameEndedImageView = new ImageView(gameEndedImage);
+        gameEndedImageView.setFitWidth(WINDOW_WIDTH);
+        gameEndedImageView.setFitHeight(WINDOW_HEIGHT);
+        gameEndedImageView.setVisible(false); // Initially hidden
+        gamePane.getChildren().add(gameEndedImageView);
     }
 
     private void keyPressingHandler() {
@@ -98,28 +110,27 @@ public class IceTowerGame extends Application {
 
     private void scrollWorld(double deltaY) {
         // Scroll both backgrounds
-        background.setTranslateY(background.getTranslateY() + deltaY);
-        background2.setTranslateY(background2.getTranslateY() + deltaY);
+        startingBackground.setTranslateY(startingBackground.getTranslateY() + deltaY);
+        skyBackground.setTranslateY(skyBackground.getTranslateY() + deltaY);
 
         // When background1 scrolls off the screen for the first time
-        if (!firstBackgroundScrollComplete && background.getTranslateY() >= WINDOW_HEIGHT) {
+        if (!firstBackgroundScrollComplete && startingBackground.getTranslateY() >= WINDOW_HEIGHT) {
             firstBackgroundScrollComplete = true;
 
             // Set background1 to background2's image after the first scroll
-            background.setImage(new Image("/util/sky22.jpg"));
-            background.setTranslateY(background2.getTranslateY() - WINDOW_HEIGHT);  // Reset position
+            startingBackground.setImage(new Image("/util/sky22.jpg"));
+            startingBackground.setTranslateY(skyBackground.getTranslateY() - WINDOW_HEIGHT);  // Reset position
 
             // Now continue scrolling both as background2
         }
-
         // When background2 scrolls off-screen, reset it below background1
-        if (background2.getTranslateY() >= WINDOW_HEIGHT) {
-            background2.setTranslateY(background.getTranslateY() - WINDOW_HEIGHT);
+        if (skyBackground.getTranslateY() >= WINDOW_HEIGHT) {
+            skyBackground.setTranslateY(startingBackground.getTranslateY() - WINDOW_HEIGHT);
         }
 
         // When background1 scrolls off-screen after first transition, reset it below background2
-        if (background.getTranslateY() >= WINDOW_HEIGHT) {
-            background.setTranslateY(background2.getTranslateY() - WINDOW_HEIGHT);
+        if (startingBackground.getTranslateY() >= WINDOW_HEIGHT) {
+            startingBackground.setTranslateY(skyBackground.getTranslateY() - WINDOW_HEIGHT);
         }
 
         // Scroll the platforms along with the background
@@ -149,11 +160,12 @@ public class IceTowerGame extends Application {
         }
     }
 
-
     private Platform createRandomPlatform(double y) {
         // Create a platform at a random horizontal position
         double xPosition = Math.random() * (WINDOW_WIDTH - 200);
-        return new Platform(xPosition,y,200, 20, "/util/plat.jpg");
+        // Generate a random width between 150 and 250
+        double platformWidth = Math.random() * (250 - 150 + 1) + 150;
+        return new Platform(xPosition,y,platformWidth, 20, "/util/plat.jpg");
     }
     private void removeOffScreenPlatforms() {
         platforms.removeIf(platform -> platform.getImageView().getTranslateY() > WINDOW_HEIGHT);
@@ -163,24 +175,13 @@ public class IceTowerGame extends Application {
         return Math.random() * 100 + 50; // Random distance between 50 and 150 pixels
     }
 
-    // Game loop for continuous updates
-    private void startGameLoop() {
-        AnimationTimer gameLoop = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                update();
-            }
-        };
-        gameLoop.start();  // Start the loop
-    }
-
-
     private void addInitialPlatforms() {
         platforms = new ArrayList<>();
+        // set initial big platform to represent the ground
         Platform groundPlatform = new Platform(0, groundHeight, WINDOW_WIDTH, 20, "/util/plat.jpg"); // A full-width transparent ground
         groundPlatform.getImageView().setOpacity(0.5); // Adjust opacity to make it semi-transparent
         platforms.add(groundPlatform);
-//        gamePane.getChildren().add(groundPlatform.getImageView());
+
         // Create some sample platforms at different positions
         Platform platform1 = new Platform(100, 450, 200, 20, "/util/plat.jpg"); // x, y, width, height
         Platform platform2 = new Platform(300, 300, 200, 20, "/util/plat.jpg");
@@ -198,33 +199,13 @@ public class IceTowerGame extends Application {
 
     // This method will update the game state in each frame
     private void update() {
-        // Here, we'll later handle player movement, platform updates, etc.
 
-        boolean isPlayerOnPlatform = false;
-        for (Platform platform : platforms) {
-            if (platform.isPlayerOnPlatform(player)) {
-                player.getImageView().setTranslateY(platform.getImageView().getTranslateY() - player.getImageView().getFitHeight());
-                player.setOnGround(true); // Set the player to be on the ground (on the platform)
-                isPlayerOnPlatform = true;
-                player.stopVerticalMovement(); // Stop falling when on the platform
-                break; // Stop downward movement
-            }
+        playerPlatformHandler();
+
+        if (player.getImageView().getTranslateY() >= groundHeight) {
+            endGame(); // Call the method to end the game
         }
-        if (!isPlayerOnPlatform) {
-            for (Platform platform : platforms) {
-                if (platform.isPlayerJumpingInto(player)) {
-                    player.stop(); // Prevent the player from moving upwards
-                    player.setOnGround(false); // Set player to on ground (platform)
-                    isPlayerOnPlatform = true; // Set flag
-                    break; // Exit loop, player collided with platform
-                }
-            }
-        }
-        // Apply gravity if the player is not on any platform
-        if (!isPlayerOnPlatform) {
-            player.setOnGround(false);
-            player.applyGravity(); // Apply gravity if falling
-        }
+
         // Check if the player has reached the middle of the screen (or some threshold)
         double playerScreenY = player.getImageView().getTranslateY();
 
@@ -244,6 +225,53 @@ public class IceTowerGame extends Application {
         player.update();
     }
 
+    private void playerPlatformHandler() {
+        boolean isPlayerOnPlatform = false;
+        for (Platform platform : platforms) {
+            if (platform.isPlayerOnPlatform(player)) {
+                player.getImageView().setTranslateY(platform.getImageView().getTranslateY() - player.getImageView().getFitHeight());
+                player.setOnGround(true); // Set the player to be on the ground (on the platform)
+                isPlayerOnPlatform = true;
+                player.stopVerticalMovement(); // Stop falling when on the platform
+                break; // Stop downward movement
+            }
+        }
+        for (Platform platform : platforms) {
+            if (platform.isPlayerJumpingInto(player)) {
+                player.stop(); // Prevent the player from moving upwards
+                player.setOnGround(false); // Set player to on ground (platform)
+                isPlayerOnPlatform = true; // Set flag
+                break; // Exit loop, player collided with platform
+            }
+        }
+
+        // Apply gravity if the player is not on any platform
+        if (!isPlayerOnPlatform) {
+            player.setOnGround(false);
+            player.applyGravity(); // Apply gravity if falling
+        }
+    }
+
+    // Game loop for continuous updates
+    private void startGameLoop() {
+        AnimationTimer gameLoop = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                update();
+            }
+        };
+        gameLoop.start();  // Start the loop
+    }
+    private void endGame() {
+        gameEndedImageView.setVisible(true); // Show the game ended image
+        // Hide all platforms
+        for (Platform platform : platforms) {
+            platform.getImageView().setVisible(false); // Hide platform images
+        }
+        // Optionally, you can stop the game loop or disable controls here
+        // For example:
+        // gameLoop.stop();
+    }
     public static void main(String[] args) {
         launch(args);  // Launch the JavaFX application
     }
