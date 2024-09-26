@@ -1,9 +1,12 @@
+package GameObjects;
+
+import GameObjects.Player;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.shape.Rectangle;
 
 public class Platform {
     private ImageView platformImageView;
+    private boolean playerStep;
 
     public Platform(double x, double y, double width, double height, String imagePath) {
         Image playerImage = new Image(getClass().getResourceAsStream(imagePath)); // Adjust the path
@@ -12,6 +15,7 @@ public class Platform {
         platformImageView.setFitHeight(height);
         platformImageView.setTranslateX(x);
         platformImageView.setTranslateY(y);
+        playerStep = false;
     }
 
     public ImageView getImageView() {
@@ -54,4 +58,11 @@ public class Platform {
         return false;
     }
 
+    public void setPlayerStep(boolean playerStep) {
+        this.playerStep = playerStep;
+    }
+
+    public boolean isPlayerStep() {
+        return playerStep;
+    }
 }

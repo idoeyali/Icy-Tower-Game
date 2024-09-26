@@ -1,10 +1,15 @@
+package GameObjects;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public abstract class Player {
-    protected ImageView playerImageView;  // Visual representation of the player
-    private double velocityY;             // Vertical velocity for jumping/falling
-    private double gravity;               // Gravity effect
+    protected static final double PLAYER_WIDTH =70;
+    protected static final double PLAYER_HEIGHT =70;
+    private ImageView playerImageView;  // Visual representation of the player
+    private double velocityY;// Vertical velocity for jumping/falling
+    private double speed;
+    private final double gravity;               // Gravity effect
     private double jumpStrength;          // Strength of the jump
     private boolean onGround;             // Flag to check if the player is on the ground
     private double velocityX;
@@ -12,16 +17,24 @@ public abstract class Player {
 
 
     // Constructor
-    public Player(double startX, double startY, double screenWidth) {
+    public Player(double startX, double startY, double speed, double jumpStrength, double screenWidth) {
+        this.speed = speed;
+        this.jumpStrength = jumpStrength;
         this.screenWidth = screenWidth;
         this.gravity = 1.0;
-        this.jumpStrength = -20.0;
         this.onGround = false;
         this.velocityY = 0;
         this.velocityX = 0;  // Initialize horizontal velocity
     }
 
-    protected abstract void initializeImage(double startX, double startY);
+    protected void initializeImage(String imageName, double startX, double startY) {
+        Image playerImage = new Image(getClass().getResourceAsStream("/util/" + imageName));
+        playerImageView = new ImageView(playerImage);
+        playerImageView.setFitWidth(PLAYER_WIDTH);
+        playerImageView.setFitHeight(PLAYER_HEIGHT);
+        playerImageView.setTranslateX(startX);
+        playerImageView.setTranslateY(startY);
+    }
 
     public ImageView getImageView() {
         return playerImageView;
@@ -54,8 +67,8 @@ public abstract class Player {
         if (playerImageView.getTranslateX() < 0) {
             playerImageView.setTranslateX(0);
         }
-        if (playerImageView.getTranslateX() > screenWidth) {
-            playerImageView.setTranslateX(screenWidth);
+        if (playerImageView.getTranslateX() + PLAYER_WIDTH > screenWidth) {
+            playerImageView.setTranslateX(screenWidth-PLAYER_WIDTH);
         }
 
     }
@@ -63,12 +76,12 @@ public abstract class Player {
     public void jump() {
         if (onGround) {
             velocityY = jumpStrength; // Set jump velocity
-            onGround = false;          // Player is now in the air
+            onGround = false;          // GameObjects.Player is now in the air
         }
     }
 
-    public void move(double deltaX) {
-        velocityX = deltaX; // Set the horizontal velocity
+    public void move(int direction){
+        velocityX = direction*speed;
     }
 
     public void stopMoving() {
