@@ -1,21 +1,31 @@
 package GameObjects;
 
 import GameObjects.Player;
+import javafx.animation.PauseTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.util.Duration;
+
+import java.security.cert.PolicyNode;
 
 public class Platform {
     private ImageView platformImageView;
     private boolean playerStep;
+    private Pane gamePane;
+    private double liveTime;
 
-    public Platform(double x, double y, double width, double height, String imagePath) {
-        Image playerImage = new Image(getClass().getResourceAsStream(imagePath)); // Adjust the path
-        platformImageView = new ImageView(playerImage);
+    public Platform(double x, double y, double width, double height, String imagePath, Pane gamePane, double liveTime) {
+        Image platformImage = new Image(getClass().getResourceAsStream(imagePath)); // Adjust the path
+        platformImageView = new ImageView(platformImage);
         platformImageView.setFitWidth(width);
         platformImageView.setFitHeight(height);
         platformImageView.setTranslateX(x);
         platformImageView.setTranslateY(y);
-        playerStep = false;
+        this.playerStep = false;
+        this.gamePane = gamePane;
+        this.liveTime = liveTime;
+        gamePane.getChildren().add(platformImageView);
     }
 
     public ImageView getImageView() {
@@ -23,6 +33,9 @@ public class Platform {
     }
 
     public boolean isPlayerOnPlatform(Player player) {
+        if (liveTime == 0){
+            return false;
+        }
         double playerBottomY = player.getImageView().getTranslateY() + player.getImageView().getFitHeight();
         // Get platform's top Y position
         double platformTopY = platformImageView.getTranslateY();
@@ -60,8 +73,20 @@ public class Platform {
 
     public void setPlayerStep(boolean playerStep) {
         this.playerStep = playerStep;
+        startDisappearTimer();
     }
+    private void startDisappearTimer() {
+        // Create a pause transition to delay for 10 seconds
+        PauseTransition pause = new PauseTransition(Duration.seconds(liveTime));
 
+        // After 10 seconds, remove the platform from the game pane
+        pause.setOnFinished(event -> {
+            gamePane.getChildren().remove(platformImageView);  // Remove platform
+            liveTime=0;  // Update the field when platform disappears
+        });
+        // Start the timer
+        pause.play();
+    }
     public boolean isPlayerStep() {
         return playerStep;
     }

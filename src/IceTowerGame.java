@@ -29,11 +29,17 @@ public class IceTowerGame extends Application {
     private ImageView gameEndedImageView;
 
     private List<Platform> platforms;
-    private boolean firstBackgroundScrollComplete = false; //TODO
+    private boolean firstBackgroundScrollComplete = false;
     private int score = -1; // Keeps track of the player's score
     private Label scoreLabel; // Label to display the score
+    private double platformTimer = 2;
 
-
+    /**
+     * The main entry point for the JavaFX application.
+     * Initializes the game scene, sets up the score label, and displays the player selection screen.
+     *
+     * @param primaryStage The primary stage for this application, onto which the application scene can be set.
+     */
     @Override
     public void start(Stage primaryStage) {
         // Initialize the game pane (the root node of our game scene)
@@ -41,25 +47,43 @@ public class IceTowerGame extends Application {
         // Create and style the score label
         initializedScoreLabel();
         // Show player selection UI
-        showPlayerSelection(primaryStage);
+        startScreenHandler(primaryStage);
     }
 
-    private void showPlayerSelection(Stage primaryStage) {
+    private void startScreenHandler(Stage primaryStage) {
         // Create a new pane for the player selection
         Pane selectionPane = new Pane();
 
-        Label selectLabel = new Label("Select Your Player:");
-        selectLabel.setStyle("-fx-font-size: 24px; -fx-text-fill: black;");
-        selectLabel.setTranslateX(50);
-        selectLabel.setTranslateY(50);
+        // Initialize and add the background for the selection screen
+        Image backgroundImage = new Image(getClass().getResourceAsStream("/util/welcome_screen.jpg"));
+        ImageView backgroundImageView = new ImageView(backgroundImage);
+        backgroundImageView.setFitWidth(WINDOW_WIDTH);  // Set to your window width
+        backgroundImageView.setFitHeight(WINDOW_HEIGHT); // Set to your window height
+        selectionPane.getChildren().add(backgroundImageView); // Add background to selection pane
 
+        Label selectLabel = new Label("Select Your Player:");
+        selectLabel.setStyle("-fx-font-size: 32px; -fx-text-fill: white;");
+        selectLabel.setTranslateX(WINDOW_WIDTH / 3);
+        selectLabel.setTranslateY(50);
+        selectionPane.getChildren().add(selectLabel);
+
+        initializedPlayersButton(primaryStage, selectionPane);
+
+        // Create a scene with the selection pane
+        Scene selectionScene = new Scene(selectionPane, WINDOW_WIDTH, WINDOW_HEIGHT);
+        primaryStage.setScene(selectionScene);
+        primaryStage.setTitle("Select Your Player");
+        primaryStage.show();
+    }
+
+    private void initializedPlayersButton(Stage primaryStage, Pane selectionPane) {
         // Buttons for selecting players
         Button pikachuButton = new Button("Select Pikachu");
         Button bertButton = new Button("Select Bert");
 
-        pikachuButton.setTranslateX(50);
+        pikachuButton.setTranslateX(WINDOW_WIDTH / 3);
         pikachuButton.setTranslateY(100);
-        bertButton.setTranslateX(200);
+        bertButton.setTranslateX(WINDOW_WIDTH / 3 + 150);
         bertButton.setTranslateY(100);
 
         // Set button actions
@@ -67,13 +91,7 @@ public class IceTowerGame extends Application {
         bertButton.setOnAction(event -> startGame("Bert", primaryStage));
 
         // Add components to the selection pane
-        selectionPane.getChildren().addAll(selectLabel, pikachuButton, bertButton);
-
-        // Create a scene with the selection pane
-        Scene selectionScene = new Scene(selectionPane, WINDOW_WIDTH, WINDOW_HEIGHT);
-        primaryStage.setScene(selectionScene);
-        primaryStage.setTitle("Select Your Player");
-        primaryStage.show();
+        selectionPane.getChildren().addAll(pikachuButton, bertButton);
     }
 
     private void startGame(String playerType, Stage primaryStage) {
@@ -84,7 +102,7 @@ public class IceTowerGame extends Application {
 
         // Create and add player based on selection
         PlayerFactory playerFactory = new PlayerFactory();
-        player = playerFactory.createPlayer(playerType, (double) WINDOW_WIDTH / 2 - 25, groundHeight - 100, WINDOW_WIDTH); // Adjust the starting coordinates
+        player = playerFactory.createPlayer(playerType, (double) WINDOW_WIDTH / 2 - 25, groundHeight - 100, WINDOW_WIDTH);
 
         // Add player to the game pane
         gamePane.getChildren().add(player.getImageView());
@@ -128,14 +146,13 @@ public class IceTowerGame extends Application {
         skyBackground.setFitWidth(WINDOW_WIDTH);
         skyBackground.setFitHeight(WINDOW_HEIGHT);
         skyBackground.setTranslateY(-WINDOW_HEIGHT);
-        gamePane.getChildren().addAll(startingBackground, skyBackground);  // Add background to the game pane
 
         Image gameEndedImage = new Image("/util/game_ended.jpg");
         gameEndedImageView = new ImageView(gameEndedImage);
         gameEndedImageView.setFitWidth(WINDOW_WIDTH);
         gameEndedImageView.setFitHeight(WINDOW_HEIGHT);
         gameEndedImageView.setVisible(false); // Initially hidden
-        gamePane.getChildren().add(gameEndedImageView);
+        gamePane.getChildren().addAll(startingBackground, skyBackground, gameEndedImageView);
     }
 
     private void keyPressingHandler() {
@@ -164,11 +181,6 @@ public class IceTowerGame extends Application {
                     break;
             }
         });
-    }
-
-    private void addPlayer() {
-        player = new Pikachu((double) WINDOW_WIDTH / 2 - 25, groundHeight - 100, WINDOW_WIDTH);
-        gamePane.getChildren().add(player.getImageView());
     }
 
 
@@ -227,7 +239,6 @@ public class IceTowerGame extends Application {
                 Platform newPlatform = createRandomPlatform(newXPosition, newYPosition);
                 // Add the new platform to the list and the scene
                 platforms.add(newPlatform);
-                gamePane.getChildren().add(newPlatform.getImageView());
             }
         }
     }
@@ -251,7 +262,8 @@ public class IceTowerGame extends Application {
     private Platform createRandomPlatform(double xPosition, double yPosition) {
         // Generate a random width between 150 and 250
         double platformWidth = randomDistance(150, 250);
-        return new Platform(xPosition, yPosition, platformWidth, 20, "/util/plat.jpg");
+        String imagePath = score > 50 ? "/util/red_platform.jpg" : "/util/plat.jpg";
+        return new Platform(xPosition, yPosition, platformWidth, 20, imagePath, gamePane, platformTimer);
     }
 
     private void removeOffScreenPlatforms() {
@@ -265,23 +277,22 @@ public class IceTowerGame extends Application {
     private void addInitialPlatforms() {
         platforms = new ArrayList<>();
         // set initial big platform to represent the ground
-        Platform groundPlatform = new Platform(0, groundHeight, WINDOW_WIDTH, 20, "/util/plat.jpg"); // A full-width transparent ground
-        groundPlatform.getImageView().setOpacity(0.5); // Adjust opacity to make it semi-transparent
+        Platform groundPlatform = new Platform(0, groundHeight, WINDOW_WIDTH, 20, "/util/plat.jpg", gamePane, 100); // A full-width transparent ground
+        groundPlatform.getImageView().setVisible(false);
+        ; // Adjust opacity to make it semi-transparent
+
         platforms.add(groundPlatform);
 
+
         // Create some sample platforms at different positions
-        Platform platform1 = new Platform(100, 450, 200, 20, "/util/plat.jpg"); // x, y, width, height
-        Platform platform2 = new Platform(300, 300, 200, 20, "/util/plat.jpg");
-        Platform platform3 = new Platform(600, 150, 200, 20, "/util/plat.jpg");
+        Platform platform1 = new Platform(100, 450, 200, 20, "/util/plat.jpg", gamePane, platformTimer); // x, y, width, height
+        Platform platform2 = new Platform(300, 300, 200, 20, "/util/plat.jpg", gamePane, platformTimer);
+        Platform platform3 = new Platform(600, 150, 200, 20, "/util/plat.jpg", gamePane, platformTimer);
 
         platforms.add(platform1);
         platforms.add(platform2);
         platforms.add(platform3);
 
-        // Add the platforms to the game pane
-        for (Platform platform : platforms) {
-            gamePane.getChildren().add(platform.getImageView());
-        }
     }
 
     // This method will update the game state in each frame
@@ -310,7 +321,6 @@ public class IceTowerGame extends Application {
                 break; // Exit loop, player collided with platform
             }
         }
-
         // Apply gravity if the player is not on any platform
         if (!isPlayerOnPlatform) {
             player.setOnGround(false);
@@ -328,7 +338,7 @@ public class IceTowerGame extends Application {
 
         // Check if the player has reached the middle of the screen (or some threshold)
         double playerScreenY = player.getImageView().getTranslateY();
-
+        platformTimer = score > 50 ? 1 : 2;
         if (playerScreenY < (double) WINDOW_HEIGHT / 2) {
             // Scroll the world downward instead of moving the player higher
             scrollWorld(-player.getVelocityY()); // Move platforms down at the rate of player's upward velocity
@@ -363,6 +373,11 @@ public class IceTowerGame extends Application {
             platform.getImageView().setVisible(false); // Hide platform images
         }
         scoreLabel.setVisible(false);
+        Label finalScoreLabel = new Label("Final score: " + score);
+        finalScoreLabel.setStyle("-fx-font-size: 32px; -fx-text-fill: white;");
+        finalScoreLabel.setTranslateX(WINDOW_WIDTH / 3 + 100);
+        finalScoreLabel.setTranslateY(50);
+        gamePane.getChildren().add(finalScoreLabel);
         // Optionally, you can stop the game loop or disable controls here
         // For example:
         // gameLoop.stop();
