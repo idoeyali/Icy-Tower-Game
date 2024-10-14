@@ -4,14 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b6fe2ec1-679e-4a85-9075-d9a85d9d2638" name="Changes" comment="adding start screen and bert">
-      <change afterPath="$PROJECT_DIR$/src/GameObjects/Eric.java" afterDir="false" />
+    <list default="true" id="b6fe2ec1-679e-4a85-9075-d9a85d9d2638" name="Changes" comment="adding eric">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/Bert.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Bert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/Pikachu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Pikachu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/Platform.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Platform.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/PlayerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/PlayerFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/IceTowerGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/IceTowerGame.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -98,7 +92,7 @@
       <option name="presentableId" value="Default" />
       <updated>1727097324225</updated>
       <workItem from="1727097325405" duration="67665000" />
-      <workItem from="1728896430659" duration="1739000" />
+      <workItem from="1728896430659" duration="3010000" />
     </task>
     <task id="LOCAL‎-00001" summary="start">
       <option name="closed" value="true" />
@@ -156,7 +150,23 @@
       <option name="project" value="LOCAL‎" />
       <updated>1727711224525</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL‎-00008" summary="adding eric">
+      <option name="closed" value="true" />
+      <created>1728898255452</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL‎-00008" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1728898255453</updated>
+    </task>
+    <task id="LOCAL‎-00009" summary="adding eric">
+      <option name="closed" value="true" />
+      <created>1728898409229</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL‎-00009" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1728898409229</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -192,6 +202,7 @@
     <MESSAGE value="adding Platform" />
     <MESSAGE value="adding infinity world" />
     <MESSAGE value="adding start screen and bert" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding start screen and bert" />
+    <MESSAGE value="adding eric" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding eric" />
   </component>
 </project>

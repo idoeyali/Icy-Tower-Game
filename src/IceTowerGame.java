@@ -30,9 +30,9 @@ public class IceTowerGame extends Application {
 
     private List<Platform> platforms;
     private boolean firstBackgroundScrollComplete = false;
-    private int score = 40; // Keeps track of the player's score
+    private int score = 0; // Keeps track of the player's score
     private Label scoreLabel; // Label to display the score
-    private double platformTimer = 20;
+    private double platformTimer = 3;
 
     /**
      * The main entry point for the JavaFX application.
@@ -320,7 +320,8 @@ public class IceTowerGame extends Application {
     private Platform createRandomPlatform(double xPosition, double yPosition) {
         // Generate a random width between 150 and 250
         double platformWidth = randomDistance(150, 250);
-        String imagePath = score > 50 ? "/util/red_platform.jpg" : "/util/plat.jpg";
+        String imagePath = score < 50 ? "/util/black_platform.jpg" : "/util/red_platform.jpg";
+        imagePath = score > 100 ? "/util/green_platform.jpg" : imagePath;
         return new Platform(xPosition, yPosition, platformWidth, 20, imagePath, gamePane, platformTimer);
     }
 
@@ -349,7 +350,7 @@ public class IceTowerGame extends Application {
     private void addInitialPlatforms() {
         platforms = new ArrayList<>();
         // set initial big platform to represent the ground
-        Platform groundPlatform = new Platform(0, groundHeight, WINDOW_WIDTH, 20, "/util/plat.jpg", gamePane, 100); // A full-width transparent ground
+        Platform groundPlatform = new Platform(0, groundHeight, WINDOW_WIDTH, 20, "/util/black_platform.jpg", gamePane, 100); // A full-width transparent ground
         groundPlatform.getImageView().setVisible(false);
         platforms.add(groundPlatform);
         generatePlatforms();
@@ -400,7 +401,9 @@ public class IceTowerGame extends Application {
         // Handle collision and jumping of the player and platforms
         playerPlatformHandler();
 
-        platformTimer = score > 50 ? 10 : 20;  // Adjust platform timer based on score
+        // Adjust platform timer based on score: if score 0-50 3 sec, if score 50-100 2 sec, and 1 sec otherwise
+        platformTimer = score > 100 ? 1 : 2;
+        platformTimer = score < 50 ? 3 : platformTimer;
         if (player.getImageView().getTranslateY() >= groundHeight + 30) {
             endGame(); // Call the method to end the game
         }
@@ -472,9 +475,9 @@ public class IceTowerGame extends Application {
             platform.getImageView().setVisible(false); // Hide platform images
         }
         scoreLabel.setVisible(false);
-        Label finalScoreLabel = new Label("Final score: " + score + "\nPress R for Restart The Game");
+        Label finalScoreLabel = new Label("            Final score: " + score + "\nPress R for Restart The Game");
         finalScoreLabel.setStyle("-fx-font-size: 32px; -fx-text-fill: white;");
-        finalScoreLabel.setTranslateX(WINDOW_WIDTH / 3 + 100);
+        finalScoreLabel.setTranslateX(WINDOW_WIDTH / 3);
         finalScoreLabel.setTranslateY(50);
         gamePane.getChildren().add(finalScoreLabel);
         gameScene.setOnKeyPressed(null);
