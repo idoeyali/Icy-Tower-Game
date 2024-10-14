@@ -41,8 +41,8 @@ Welcome to the **Ice Tower Game**! This is a 2D platformer built in Java using J
 ## How to Play
 - **Select Your Character**: Upon starting the game, you will see a welcome screen where you can choose between characters.
 - **Jump Between Platforms**: Use the keyboard controls to jump between platforms.
-    - **Move Left/Right**: Use the left and right arrow keys.
-    - **Jump**: Use the spacebar to jump.
+  - **Move Left/Right**: Use the left and right arrow keys.
+  - **Jump**: Use the spacebar to jump.
 - **Don't Fall**: The goal is to jump between platforms without falling off the screen. Platforms will disappear after 10 seconds, so plan your jumps carefully!
 - **Restart**: When the game ends, press `R` to restart and try again.
 
