@@ -14,7 +14,7 @@ Welcome to the **Ice Tower Game**! This is a 2D platformer built in Java using J
 ---
 
 ## Features
-- **Character Selection**: Choose between multiple characters with unique speeds (e.g., Pikachu and Bert).
+- **Character Selection**: Choose between multiple characters with unique speeds and jumps (e.g., Pikachu and Bert).
 - **Infinite Platforms**: Platforms disappear after 10 seconds (for start), and new ones appear randomly.
 - **Game Over and Restart**: When the player falls off the screen, the game ends, and you can restart by pressing `R`.
 - **Score Tracking**: The game tracks your score based on how high you've climbed.
