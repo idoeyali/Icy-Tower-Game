@@ -22,7 +22,7 @@ public class Platform {
         platformImageView.setFitHeight(height);
         platformImageView.setTranslateX(x);
         platformImageView.setTranslateY(y);
-        this.playerStep = false;
+        this.playerStep = liveTime==100; // True if it's the ground platform
         this.gamePane = gamePane;
         this.liveTime = liveTime;
         gamePane.getChildren().add(platformImageView);
@@ -45,18 +45,10 @@ public class Platform {
         }
         return false;
     }
-    public boolean isPlayerBeneathPlatform(Player player) {
-        double playerTopY = player.getImageView().getTranslateY();
-        // Get platform's top Y position
-        double platformTopY = platformImageView.getTranslateY() + platformImageView.getFitHeight();
-        // If the player height equal to platform height
-        if (platformTopY >= playerTopY - 15 && platformTopY <= playerTopY + 5) {
-            return player.getImageView().getTranslateX() + 20 <= platformImageView.getTranslateX() + platformImageView.getFitWidth()
-                    && player.getImageView().getTranslateX() + player.getImageView().getFitWidth() - 20 >= platformImageView.getTranslateX();
-        }
-        return false;
-    }
     public boolean isPlayerJumpingInto(Player player) {
+        if (liveTime == 0){
+            return false;
+        }
         // Get player's top Y position
         double playerTopY = player.getImageView().getTranslateY();
 

@@ -1,4 +1,3 @@
-import GameObjects.Pikachu;
 import GameObjects.Platform;
 import GameObjects.Player;
 import GameObjects.PlayerFactory;
@@ -7,6 +6,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
@@ -30,13 +30,13 @@ public class IceTowerGame extends Application {
 
     private List<Platform> platforms;
     private boolean firstBackgroundScrollComplete = false;
-    private int score = -1; // Keeps track of the player's score
+    private int score = 40; // Keeps track of the player's score
     private Label scoreLabel; // Label to display the score
-    private double platformTimer = 2;
+    private double platformTimer = 20;
 
     /**
      * The main entry point for the JavaFX application.
-     * Initializes the game scene, sets up the score label, and displays the player selection screen.
+     * Initializes the game scene, and displays the player selection screen.
      *
      * @param primaryStage The primary stage for this application, onto which the application scene can be set.
      */
@@ -44,12 +44,16 @@ public class IceTowerGame extends Application {
     public void start(Stage primaryStage) {
         // Initialize the game pane (the root node of our game scene)
         gamePane = new Pane();
-        // Create and style the score label
-        initializedScoreLabel();
         // Show player selection UI
         startScreenHandler(primaryStage);
     }
 
+    /**
+     * Sets up the start screen for player selection.
+     * Displays player selection options and sets the primary stage with the selection scene.
+     *
+     * @param primaryStage The primary stage used to display the selection screen.
+     */
     private void startScreenHandler(Stage primaryStage) {
         // Create a new pane for the player selection
         Pane selectionPane = new Pane();
@@ -76,33 +80,52 @@ public class IceTowerGame extends Application {
         primaryStage.show();
     }
 
+    /**
+     * Initializes the player selection buttons for Pikachu and Bert.
+     * Adds event listeners to handle the start of the game based on the player's choice.
+     *
+     * @param primaryStage  The primary stage used for displaying the game scene.
+     * @param selectionPane The Pane to which the buttons for player selection are added.
+     */
     private void initializedPlayersButton(Stage primaryStage, Pane selectionPane) {
         // Buttons for selecting players
         Button pikachuButton = new Button("Select Pikachu");
         Button bertButton = new Button("Select Bert");
+        Button ericButton = new Button("Select Eric");
 
         pikachuButton.setTranslateX(WINDOW_WIDTH / 3);
         pikachuButton.setTranslateY(100);
         bertButton.setTranslateX(WINDOW_WIDTH / 3 + 150);
         bertButton.setTranslateY(100);
+        ericButton.setTranslateX(WINDOW_WIDTH / 3 + 300);
+        ericButton.setTranslateY(100);
 
         // Set button actions
         pikachuButton.setOnAction(event -> startGame("Pikachu", primaryStage));
         bertButton.setOnAction(event -> startGame("Bert", primaryStage));
+        ericButton.setOnAction(event -> startGame("Eric", primaryStage));
 
         // Add components to the selection pane
-        selectionPane.getChildren().addAll(pikachuButton, bertButton);
+        selectionPane.getChildren().addAll(pikachuButton, bertButton, ericButton);
     }
 
+    /**
+     * Starts the game based on the selected player type (Pikachu or Bert).
+     * Initializes the background, player, platforms, and key controls, then switches to the game scene.
+     *
+     * @param playerType   The type of player selected (either "Pikachu" or "Bert").
+     * @param primaryStage The primary stage used for displaying the game scene.
+     */
     private void startGame(String playerType, Stage primaryStage) {
         // Remove player selection UI
         gamePane.getChildren().clear();
+
         initializedBackground();
-        gamePane.getChildren().add(scoreLabel); // Retain score label
+        initializedScoreLabel();
 
         // Create and add player based on selection
         PlayerFactory playerFactory = new PlayerFactory();
-        player = playerFactory.createPlayer(playerType, (double) WINDOW_WIDTH / 2 - 25, groundHeight - 100, WINDOW_WIDTH);
+        player = playerFactory.createPlayer(playerType, (double) WINDOW_WIDTH / 2, groundHeight - 100, WINDOW_WIDTH);
 
         // Add player to the game pane
         gamePane.getChildren().add(player.getImageView());
@@ -124,6 +147,10 @@ public class IceTowerGame extends Application {
         startGameLoop();
     }
 
+    /**
+     * Initializes the score label displayed in the top left corner of the game scene.
+     * Sets its initial style and position on the game pane.
+     */
     private void initializedScoreLabel() {
         scoreLabel = new Label("Score: " + score);
         scoreLabel.setStyle("-fx-font-size: 32px; -fx-text-fill: black;"); // Set font size and color
@@ -134,14 +161,18 @@ public class IceTowerGame extends Application {
         gamePane.getChildren().add(scoreLabel);
     }
 
+    /**
+     * Initializes the background image for the game scene.
+     * The background fills the game window and creates the illusion of an ice tower.
+     */
     private void initializedBackground() {
         //Adding game background
-        Image backgroundImage = new Image("/util/sky2.jpg");
+        Image backgroundImage = new Image("/util/game_background.jpg");
         startingBackground = new ImageView(backgroundImage);
         startingBackground.setFitWidth(WINDOW_WIDTH);
         startingBackground.setFitHeight(WINDOW_HEIGHT);
 
-        Image skyBackgroundImage = new Image("/util/sky22.jpg");
+        Image skyBackgroundImage = new Image("/util/sky_background.jpg");
         skyBackground = new ImageView(skyBackgroundImage);
         skyBackground.setFitWidth(WINDOW_WIDTH);
         skyBackground.setFitHeight(WINDOW_HEIGHT);
@@ -155,6 +186,10 @@ public class IceTowerGame extends Application {
         gamePane.getChildren().addAll(startingBackground, skyBackground, gameEndedImageView);
     }
 
+    /**
+     * Sets up the keyboard controls for the player character.
+     * Handles key press events for player movement (left, right, jump).
+     */
     private void keyPressingHandler() {
         gameScene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
@@ -183,7 +218,12 @@ public class IceTowerGame extends Application {
         });
     }
 
-
+    /**
+     * Scrolls the world based on the player's movement.
+     * This function scrolls both the background and platforms in sync to give the illusion of an endless world.
+     *
+     * @param deltaY The amount to scroll the background and platforms vertically.
+     */
     private void scrollWorld(double deltaY) {
         // Scroll both backgrounds
         startingBackground.setTranslateY(startingBackground.getTranslateY() + deltaY);
@@ -194,7 +234,7 @@ public class IceTowerGame extends Application {
             firstBackgroundScrollComplete = true;
 
             // Set background1 to background2's image after the first scroll
-            startingBackground.setImage(new Image("/util/sky22.jpg"));
+            startingBackground.setImage(new Image("/util/sky_background.jpg"));
             startingBackground.setTranslateY(skyBackground.getTranslateY() - WINDOW_HEIGHT);  // Reset position
 
             // Now continue scrolling both as background2
@@ -215,6 +255,10 @@ public class IceTowerGame extends Application {
         }
     }
 
+    /**
+     * Generates new platforms if the highest platform on the screen is below a certain threshold.
+     * Ensures new platforms are created above the player's current position.
+     */
     private void generatePlatforms() {
         // Find the highest platform (the one closest to the top of the screen)
         Platform highestPlatform = platforms.stream()
@@ -243,6 +287,13 @@ public class IceTowerGame extends Application {
         }
     }
 
+    /**
+     * Generates a random X position for new platforms within the bounds of the window.
+     * Ensures the new platform isn't too far from the last generated platform.
+     *
+     * @param highestPlatformX The X position of the highest platform.
+     * @return A new X position for the next platform.
+     */
     private double generateNewXPosition(double highestPlatformX) {
         double distance = randomDistance(150, 400);
         if (highestPlatformX < 100) {
@@ -258,7 +309,14 @@ public class IceTowerGame extends Application {
         }
     }
 
-
+    /**
+     * Creates a new platform with random width and at the specified position.
+     * Adjusts platform's image based on the current score.
+     *
+     * @param xPosition The X coordinate of the new platform.
+     * @param yPosition The Y coordinate of the new platform.
+     * @return The newly created platform.
+     */
     private Platform createRandomPlatform(double xPosition, double yPosition) {
         // Generate a random width between 150 and 250
         double platformWidth = randomDistance(150, 250);
@@ -266,36 +324,43 @@ public class IceTowerGame extends Application {
         return new Platform(xPosition, yPosition, platformWidth, 20, imagePath, gamePane, platformTimer);
     }
 
+    /**
+     * Removes platforms that are off-screen (i.e., platforms that have scrolled past the bottom of the game window).
+     */
     private void removeOffScreenPlatforms() {
         platforms.removeIf(platform -> platform.getImageView().getTranslateY() > WINDOW_HEIGHT);
     }
 
+    /**
+     * Generates a random distance within a specified range.
+     *
+     * @param leftRange  The minimum value for the random distance.
+     * @param rightRange The maximum value for the random distance.
+     * @return A random double value between leftRange and rightRange.
+     */
     private double randomDistance(double leftRange, double rightRange) {
         return Math.random() * (rightRange - leftRange) + leftRange;
     }
 
+    /**
+     * Adds the initial platforms to the game pane.
+     * Creates and positions the starting platforms for the player to jump on.
+     */
     private void addInitialPlatforms() {
         platforms = new ArrayList<>();
         // set initial big platform to represent the ground
         Platform groundPlatform = new Platform(0, groundHeight, WINDOW_WIDTH, 20, "/util/plat.jpg", gamePane, 100); // A full-width transparent ground
         groundPlatform.getImageView().setVisible(false);
-        ; // Adjust opacity to make it semi-transparent
-
         platforms.add(groundPlatform);
-
-
-        // Create some sample platforms at different positions
-        Platform platform1 = new Platform(100, 450, 200, 20, "/util/plat.jpg", gamePane, platformTimer); // x, y, width, height
-        Platform platform2 = new Platform(300, 300, 200, 20, "/util/plat.jpg", gamePane, platformTimer);
-        Platform platform3 = new Platform(600, 150, 200, 20, "/util/plat.jpg", gamePane, platformTimer);
-
-        platforms.add(platform1);
-        platforms.add(platform2);
-        platforms.add(platform3);
-
+        generatePlatforms();
+        generatePlatforms();
+        generatePlatforms();
     }
 
-    // This method will update the game state in each frame
+    /**
+     * Handles collision detection between the player and the platforms.
+     * Checks whether the player is on a platform or is jumping into one, applying gravity if necessary.
+     */
     private void playerPlatformHandler() {
         boolean isPlayerOnPlatform = false;
         for (Platform platform : platforms) {
@@ -306,8 +371,7 @@ public class IceTowerGame extends Application {
                 player.stopVerticalMovement();
                 // Check if the platform hasn't already given score
                 if (!platform.isPlayerStep()) {
-                    score++;  // Increase the score by 1
-                    scoreLabel.setText("Score: " + score);  // Update the score label
+                    score++;
                     platform.setPlayerStep(true);  // Mark the platform as scored
                 }// Stop falling when on the platform
                 break; // Stop downward movement
@@ -328,21 +392,17 @@ public class IceTowerGame extends Application {
         }
     }
 
-    private void update() {
-
+    /**
+     * Updates the game state in each frame.
+     * This includes handling collisions, generating new platforms, updating player position, and managing the score.
+     */
+    private void updateGameState() {
+        // Handle collision and jumping of the player and platforms
         playerPlatformHandler();
 
-        if (player.getImageView().getTranslateY() >= groundHeight + 20) {
+        platformTimer = score > 50 ? 10 : 20;  // Adjust platform timer based on score
+        if (player.getImageView().getTranslateY() >= groundHeight + 30) {
             endGame(); // Call the method to end the game
-        }
-
-        // Check if the player has reached the middle of the screen (or some threshold)
-        double playerScreenY = player.getImageView().getTranslateY();
-        platformTimer = score > 50 ? 1 : 2;
-        if (playerScreenY < (double) WINDOW_HEIGHT / 2) {
-            // Scroll the world downward instead of moving the player higher
-            scrollWorld(-player.getVelocityY()); // Move platforms down at the rate of player's upward velocity
-            player.getImageView().setTranslateY((double) WINDOW_HEIGHT / 2); // Keep player in the middle
         }
 
         // Call generatePlatforms to create new platforms as needed
@@ -355,17 +415,56 @@ public class IceTowerGame extends Application {
         player.update();
     }
 
-    // Game loop for continuous updates
+    /**
+     * Renders the game visuals in each frame.
+     * This includes handling background scrolling, keeping the player centered, and updating the score label.
+     */
+    private void render() {
+        // Handle world scrolling
+        double playerScreenY = player.getImageView().getTranslateY();
+        // Check if the player has reached the middle of the screen
+        if (playerScreenY < (double) WINDOW_HEIGHT / 2) {
+            scrollWorld(-player.getVelocityY());  // Scroll the world when the player jumps
+            player.getImageView().setTranslateY((double) WINDOW_HEIGHT / 2);  // Keep the player centered
+        }
+        // Update score label
+        scoreLabel.setText("Score: " + score);
+    }
+
+    /**
+     * Starts the game loop that continuously updates the game state and renders the visuals.
+     * The loop runs at every frame, ensuring smooth gameplay.
+     */
     private void startGameLoop() {
         AnimationTimer gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                update();
+                updateGameState();  // Update all game-related logic
+                render();           // Draw everything to the screen
             }
         };
         gameLoop.start();  // Start the loop
     }
 
+    /**
+     * Restarts the game by resetting the game state and returning to the start screen.
+     */
+    private void restartGame(Stage primaryStage) {
+        // Clear existing game state
+        gamePane.getChildren().clear();
+
+        // Reset other game-related elements if necessary
+        score = 0;
+        platforms.clear();
+
+        // Go back to the start screen
+        start(primaryStage);
+    }
+
+    /**
+     * Ends the game when the player falls below the ground.
+     * Displays the game over screen, hides platforms, and shows the final score.
+     */
     private void endGame() {
         gameEndedImageView.setVisible(true); // Show the game ended image
         // Hide all platforms
@@ -373,14 +472,17 @@ public class IceTowerGame extends Application {
             platform.getImageView().setVisible(false); // Hide platform images
         }
         scoreLabel.setVisible(false);
-        Label finalScoreLabel = new Label("Final score: " + score);
+        Label finalScoreLabel = new Label("Final score: " + score + "\nPress R for Restart The Game");
         finalScoreLabel.setStyle("-fx-font-size: 32px; -fx-text-fill: white;");
         finalScoreLabel.setTranslateX(WINDOW_WIDTH / 3 + 100);
         finalScoreLabel.setTranslateY(50);
         gamePane.getChildren().add(finalScoreLabel);
-        // Optionally, you can stop the game loop or disable controls here
-        // For example:
-        // gameLoop.stop();
+        gameScene.setOnKeyPressed(null);
+        gameScene.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.R) {
+                restartGame((Stage) finalScoreLabel.getScene().getWindow()); // Restart the game if "R" is pressed
+            }
+        });
     }
 
     public static void main(String[] args) {

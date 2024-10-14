@@ -82,6 +82,7 @@ public abstract class Player {
 
     public void move(int direction){
         velocityX = direction*speed;
+        System.out.println(velocityX);
     }
 
     public void stopMoving() {

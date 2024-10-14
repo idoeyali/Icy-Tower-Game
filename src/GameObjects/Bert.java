@@ -1,7 +1,7 @@
 package GameObjects;
 
 public class Bert extends Player {
-    private static final double BERT_SPEED = 12;
+    private static final double BERT_SPEED = 10;
     private static final double BERT_JUMP_STRENGTH = -20;
 
     public Bert(double startX, double startY, double screenWidth) {

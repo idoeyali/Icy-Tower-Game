@@ -8,6 +8,8 @@ public class PlayerFactory {
                 return new Pikachu(startX, startY, screenWidth);
             case "bert":
                 return new Bert(startX, startY, screenWidth);
+            case "eric":
+                return new Eric(startX, startY, screenWidth);
             default:
                 throw new IllegalArgumentException("Unknown player type: " + playerType);
         }

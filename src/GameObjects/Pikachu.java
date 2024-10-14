@@ -1,8 +1,8 @@
 package GameObjects;
 
 public class Pikachu extends Player {
-    private static final double PIKACHU_SPEED = 12;
-    private static final double PIKACHU_JUMP_STRENGTH = -20;
+    private static final double PIKACHU_SPEED = 13;
+    private static final double PIKACHU_JUMP_STRENGTH = -19;
 
     public Pikachu(double startX, double startY, double screenWidth) {
         super(startX, startY, PIKACHU_SPEED, PIKACHU_JUMP_STRENGTH,screenWidth);

@@ -4,16 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b6fe2ec1-679e-4a85-9075-d9a85d9d2638" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/javafx_swing.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/IceTowerGame.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/IceTowerGame.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+    <list default="true" id="b6fe2ec1-679e-4a85-9075-d9a85d9d2638" name="Changes" comment="adding start screen and bert">
+      <change afterPath="$PROJECT_DIR$/src/GameObjects/Eric.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/Bert.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Bert.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/Pikachu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Pikachu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/Platform.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Platform.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/PlayerFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/PlayerFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/IceTowerGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/IceTowerGame.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,37 +29,40 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 8
-}]]></component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
   <component name="ProjectId" id="2mTOu7vZAs5vFOVwRZDKgRRac8s" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.IceTowerGame.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/user/IdeaProjects/javafx-sdk-23/lib/javafx-swt.jar",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "onboarding.tips.debug.path": "C:/Users/user/IdeaProjects/IceTowerGame/src/Main.java",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.IceTowerGame.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/user/IdeaProjects/javafx-sdk-23/lib/javafx-swt.jar&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/user/IdeaProjects/IceTowerGame/src/Main.java&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.VCS&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Application.IceTowerGame">
     <configuration name="IceTowerGame" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="IceTowerGame" />
@@ -95,8 +97,66 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1727097324225</updated>
-      <workItem from="1727097325405" duration="2703000" />
+      <workItem from="1727097325405" duration="67665000" />
+      <workItem from="1728896430659" duration="1739000" />
     </task>
+    <task id="LOCAL‎-00001" summary="start">
+      <option name="closed" value="true" />
+      <created>1727100156199</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL‎-00001" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1727100156199</updated>
+    </task>
+    <task id="LOCAL‎-00002" summary="adding player">
+      <option name="closed" value="true" />
+      <created>1727105740390</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL‎-00002" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1727105740390</updated>
+    </task>
+    <task id="LOCAL‎-00003" summary="adding Platform">
+      <option name="closed" value="true" />
+      <created>1727190641059</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL‎-00003" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1727190641059</updated>
+    </task>
+    <task id="LOCAL‎-00004" summary="adding infinity world">
+      <option name="closed" value="true" />
+      <created>1727283196512</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL‎-00004" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1727283196512</updated>
+    </task>
+    <task id="LOCAL‎-00005" summary="adding infinity world">
+      <option name="closed" value="true" />
+      <created>1727285673695</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL‎-00005" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1727285673695</updated>
+    </task>
+    <task id="LOCAL‎-00006" summary="adding start screen and bert">
+      <option name="closed" value="true" />
+      <created>1727368956791</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL‎-00006" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1727368956791</updated>
+    </task>
+    <task id="LOCAL‎-00007" summary="adding start screen and bert">
+      <option name="closed" value="true" />
+      <created>1727711224525</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL‎-00007" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1727711224525</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -124,5 +184,14 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="start" />
+    <MESSAGE value="adding player" />
+    <MESSAGE value="adding platform" />
+    <MESSAGE value="adding Platform" />
+    <MESSAGE value="adding infinity world" />
+    <MESSAGE value="adding start screen and bert" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding start screen and bert" />
   </component>
 </project>
