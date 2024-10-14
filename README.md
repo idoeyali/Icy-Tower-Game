@@ -47,7 +47,16 @@ Welcome to the **Ice Tower Game**! This is a 2D platformer built in Java using J
 - **Restart**: When the game ends, press `R` to restart and try again.
 
 ## Screenshots
-*(Add a few screenshots of your game here)*
+<p align="center">
+  <img src="images/im0.jpg" width="300" />
+  <img src="images/im1.jpg" width="300" />
+</p>
+
+<p align="center">
+  <img src="images/im2.jpg" width="300" />
+  <img src="images/im3.jpg" width="300" />
+</p>
+
 
 ## Future Enhancements
 Some ideas for future updates:
