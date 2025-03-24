@@ -22,17 +22,15 @@ public class IceTowerGame extends Application {
     private final double groundHeight = 500;
     private Pane gamePane;  // This is the main game area (where we'll add game elements like player and platforms)
     private Scene gameScene;
+    private AnimationTimer gameLoop; // Store the timer reference
 
     private Player player;
-    private ImageView startingBackground;
-    private ImageView skyBackground;
-    private ImageView gameEndedImageView;
+    private BackgroundManager backgroundManager;
 
     private List<Platform> platforms;
-    private boolean firstBackgroundScrollComplete = false;
     private int score = 0; // Keeps track of the player's score
     private Label scoreLabel; // Label to display the score
-    private double platformTimer = 3;
+    private double platformTimer = 70;
 
     /**
      * The main entry point for the JavaFX application.
@@ -117,35 +115,31 @@ public class IceTowerGame extends Application {
      * @param primaryStage The primary stage used for displaying the game scene.
      */
     private void startGame(String playerType, Stage primaryStage) {
-        // Remove player selection UI
-        gamePane.getChildren().clear();
+        gamePane = new Pane(); // Reinitialize game pane
+        platforms = new ArrayList<>(); // Initialize the platforms list
+        score = 0; // Reset score
 
-        initializedBackground();
+        backgroundManager = new BackgroundManager(gamePane, WINDOW_WIDTH, WINDOW_HEIGHT);
+        backgroundManager.initializeBackground();
         initializedScoreLabel();
 
         // Create and add player based on selection
         PlayerFactory playerFactory = new PlayerFactory();
         player = playerFactory.createPlayer(playerType, (double) WINDOW_WIDTH / 2, groundHeight - 100, WINDOW_WIDTH);
-
-        // Add player to the game pane
-        gamePane.getChildren().add(player.getImageView());
+        gamePane.getChildren().add(player.getImageView()); // Ensure player is added before InputHandler
 
         addInitialPlatforms();
 
-        // Create a scene with the game pane
         gameScene = new Scene(gamePane, WINDOW_WIDTH, WINDOW_HEIGHT);
+        new InputHandler(gameScene, player); // Set up input after player is added
 
-        // Set up keyboard controls
-        keyPressingHandler();
-
-        // Set the scene to the main game scene
         primaryStage.setScene(gameScene);
         primaryStage.setTitle("Ice Tower Game");
         primaryStage.show();
 
-        // Start the game loop (handles continuous updates like movement, collision, etc.)
-        startGameLoop();
+        startGameLoop(primaryStage); // Start the game loop
     }
+
 
     /**
      * Initializes the score label displayed in the top left corner of the game scene.
@@ -161,99 +155,6 @@ public class IceTowerGame extends Application {
         gamePane.getChildren().add(scoreLabel);
     }
 
-    /**
-     * Initializes the background image for the game scene.
-     * The background fills the game window and creates the illusion of an ice tower.
-     */
-    private void initializedBackground() {
-        //Adding game background
-        Image backgroundImage = new Image("/util/game_background.jpg");
-        startingBackground = new ImageView(backgroundImage);
-        startingBackground.setFitWidth(WINDOW_WIDTH);
-        startingBackground.setFitHeight(WINDOW_HEIGHT);
-
-        Image skyBackgroundImage = new Image("/util/sky_background.jpg");
-        skyBackground = new ImageView(skyBackgroundImage);
-        skyBackground.setFitWidth(WINDOW_WIDTH);
-        skyBackground.setFitHeight(WINDOW_HEIGHT);
-        skyBackground.setTranslateY(-WINDOW_HEIGHT);
-
-        Image gameEndedImage = new Image("/util/game_ended.jpg");
-        gameEndedImageView = new ImageView(gameEndedImage);
-        gameEndedImageView.setFitWidth(WINDOW_WIDTH);
-        gameEndedImageView.setFitHeight(WINDOW_HEIGHT);
-        gameEndedImageView.setVisible(false); // Initially hidden
-        gamePane.getChildren().addAll(startingBackground, skyBackground, gameEndedImageView);
-    }
-
-    /**
-     * Sets up the keyboard controls for the player character.
-     * Handles key press events for player movement (left, right, jump).
-     */
-    private void keyPressingHandler() {
-        gameScene.setOnKeyPressed(event -> {
-            switch (event.getCode()) {
-                case LEFT:
-                    player.move(Constants.LEFT_DIRECTION);  // Move left by 10 pixels
-                    break;
-                case RIGHT:
-                    player.move(Constants.RIGHT_DIRECTION);   // Move right by 10 pixels
-                    break;
-                case SPACE:
-                    player.jump();     // Make the player jump
-                    break;
-                default:
-                    break;
-            }
-        });
-        gameScene.setOnKeyReleased(event -> {
-            switch (event.getCode()) {
-                case LEFT:
-                case RIGHT:
-                    player.stopMoving(); // Stop horizontal movement when key is released
-                    break;
-                default:
-                    break;
-            }
-        });
-    }
-
-    /**
-     * Scrolls the world based on the player's movement.
-     * This function scrolls both the background and platforms in sync to give the illusion of an endless world.
-     *
-     * @param deltaY The amount to scroll the background and platforms vertically.
-     */
-    private void scrollWorld(double deltaY) {
-        // Scroll both backgrounds
-        startingBackground.setTranslateY(startingBackground.getTranslateY() + deltaY);
-        skyBackground.setTranslateY(skyBackground.getTranslateY() + deltaY);
-
-        // When background1 scrolls off the screen for the first time
-        if (!firstBackgroundScrollComplete && startingBackground.getTranslateY() >= WINDOW_HEIGHT) {
-            firstBackgroundScrollComplete = true;
-
-            // Set background1 to background2's image after the first scroll
-            startingBackground.setImage(new Image("/util/sky_background.jpg"));
-            startingBackground.setTranslateY(skyBackground.getTranslateY() - WINDOW_HEIGHT);  // Reset position
-
-            // Now continue scrolling both as background2
-        }
-        // When background2 scrolls off-screen, reset it below background1
-        if (skyBackground.getTranslateY() >= WINDOW_HEIGHT) {
-            skyBackground.setTranslateY(startingBackground.getTranslateY() - WINDOW_HEIGHT);
-        }
-
-        // When background1 scrolls off-screen after first transition, reset it below background2
-        if (startingBackground.getTranslateY() >= WINDOW_HEIGHT) {
-            startingBackground.setTranslateY(skyBackground.getTranslateY() - WINDOW_HEIGHT);
-        }
-
-        // Scroll the platforms along with the background
-        for (Platform platform : platforms) {
-            platform.getImageView().setTranslateY(platform.getImageView().getTranslateY() + deltaY);
-        }
-    }
 
     /**
      * Generates new platforms if the highest platform on the screen is below a certain threshold.
@@ -397,7 +298,7 @@ public class IceTowerGame extends Application {
      * Updates the game state in each frame.
      * This includes handling collisions, generating new platforms, updating player position, and managing the score.
      */
-    private void updateGameState() {
+    private void updateGameState(Stage primaryStage) {
         // Handle collision and jumping of the player and platforms
         playerPlatformHandler();
 
@@ -405,7 +306,7 @@ public class IceTowerGame extends Application {
         platformTimer = score > 100 ? 1 : 2;
         platformTimer = score < 50 ? 3 : platformTimer;
         if (player.getImageView().getTranslateY() >= groundHeight + 30) {
-            endGame(); // Call the method to end the game
+            endGame(primaryStage); // Call the method to end the game
         }
 
         // Call generatePlatforms to create new platforms as needed
@@ -423,70 +324,68 @@ public class IceTowerGame extends Application {
      * This includes handling background scrolling, keeping the player centered, and updating the score label.
      */
     private void render() {
-        // Handle world scrolling
         double playerScreenY = player.getImageView().getTranslateY();
-        // Check if the player has reached the middle of the screen
         if (playerScreenY < (double) WINDOW_HEIGHT / 2) {
-            scrollWorld(-player.getVelocityY());  // Scroll the world when the player jumps
-            player.getImageView().setTranslateY((double) WINDOW_HEIGHT / 2);  // Keep the player centered
+            // Use the background manager to handle scrolling
+            backgroundManager.scrollBackground(-player.getVelocityY(), platforms);
+            player.getImageView().setTranslateY((double) WINDOW_HEIGHT / 2);
         }
-        // Update score label
         scoreLabel.setText("Score: " + score);
     }
+
 
     /**
      * Starts the game loop that continuously updates the game state and renders the visuals.
      * The loop runs at every frame, ensuring smooth gameplay.
      */
-    private void startGameLoop() {
-        AnimationTimer gameLoop = new AnimationTimer() {
+    private void startGameLoop(Stage primaryStage) {
+        if (gameLoop != null) {
+            gameLoop.stop(); // Stop any previous game loop
+        }
+
+        gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                updateGameState();  // Update all game-related logic
+                updateGameState(primaryStage);  // Update all game-related logic
                 render();           // Draw everything to the screen
             }
         };
         gameLoop.start();  // Start the loop
     }
 
-    /**
-     * Restarts the game by resetting the game state and returning to the start screen.
-     */
-    private void restartGame(Stage primaryStage) {
-        // Clear existing game state
-        gamePane.getChildren().clear();
-
-        // Reset other game-related elements if necessary
-        score = 0;
-        platforms.clear();
-
-        // Go back to the start screen
-        start(primaryStage);
-    }
 
     /**
      * Ends the game when the player falls below the ground.
      * Displays the game over screen, hides platforms, and shows the final score.
      */
-    private void endGame() {
-        gameEndedImageView.setVisible(true); // Show the game ended image
-        // Hide all platforms
+    private void endGame(Stage primaryStage) {
+        // Show game over background via BackgroundManager
+        backgroundManager.showGameOverScreen();
+
+        // Hide the player's image view so it "disappears" from the screen
+        player.getImageView().setVisible(false);
+
+        // Hide all platform images
         for (Platform platform : platforms) {
-            platform.getImageView().setVisible(false); // Hide platform images
+            platform.getImageView().setVisible(false);
         }
+
+        // Hide the score label
         scoreLabel.setVisible(false);
-        Label finalScoreLabel = new Label("            Final score: " + score + "\nPress R for Restart The Game");
+
+        // Optionally, display a final score label
+        Label finalScoreLabel = new Label("Final score: " + score + "\nPress R to Restart The Game");
         finalScoreLabel.setStyle("-fx-font-size: 32px; -fx-text-fill: white;");
         finalScoreLabel.setTranslateX(WINDOW_WIDTH / 3);
         finalScoreLabel.setTranslateY(50);
         gamePane.getChildren().add(finalScoreLabel);
-        gameScene.setOnKeyPressed(null);
         gameScene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.R) {
-                restartGame((Stage) finalScoreLabel.getScene().getWindow()); // Restart the game if "R" is pressed
+                startScreenHandler(primaryStage); // Restart the game
             }
         });
     }
+
 
     public static void main(String[] args) {
         launch(args);  // Launch the JavaFX application
