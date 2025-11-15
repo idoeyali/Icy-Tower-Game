@@ -19,6 +19,9 @@ Welcome to the **Ice Tower Game**! This is a 2D platformer built in Java using J
 - **Game Over and Restart**: When the player falls off the screen, the game ends, and you can restart by pressing `R`.
 - **Score Tracking**: The game tracks your score based on how high you've climbed.
 - **Dynamic Difficulty**: As you climb higher, platforms become harder to reach and disappear sooner.
+- **Bombs and Gifts**: Bombs and gifts appear on platforms. Touching a bomb ends the game.
+   Positive gifts increase your score (+10), and negative gifts decrease your score (-10).
+
 
 ---
 
@@ -43,6 +46,8 @@ Welcome to the **Ice Tower Game**! This is a 2D platformer built in Java using J
 - **Jump Between Platforms**: Use the keyboard controls to jump between platforms.
   - **Move Left/Right**: Use the left and right arrow keys.
   - **Jump**: Use the spacebar to jump.
+- **Avoid Bombs**: Bombs appear on some platforms. Touching them ends the game.
+- **Collect Gift**: Positive gifts increase your score by 10, negative gifts reduce your score by 10.
 - **Don't Fall**: The goal is to jump between platforms without falling off the screen. Platforms will disappear after 10 seconds, so plan your jumps carefully!
 - **Restart**: When the game ends, press `R` to restart and try again.
 
