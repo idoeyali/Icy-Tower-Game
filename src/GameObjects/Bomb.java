@@ -20,7 +20,7 @@ public class Bomb {
         this.offsetX = itemX - platform.getImageView().getTranslateX();
         this.offsetY = itemY - platform.getImageView().getTranslateY();
 
-        Image bombImage = new Image(getClass().getResourceAsStream("/util/bomb.jpg"));
+        Image bombImage = new Image(getClass().getResourceAsStream("/util/bomb.png"));
         this.imageView = new ImageView(bombImage);
         this.imageView.setFitWidth(40);
         this.imageView.setFitHeight(40);

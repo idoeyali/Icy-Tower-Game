@@ -39,7 +39,7 @@ Welcome to the **Ice Tower Game**! This is a 2D platformer built in Java using J
 2. Compile and run the project:
     * Open the project in your favorite IDE (such as IntelliJ IDEA or Eclipse).
     * Ensure that JavaFX is configured correctly in your IDE.
-    * Run the IceTowerGame class to start the game.
+    * Run the Game.IceTowerGame class to start the game.
 
 ## How to Play
 - **Select Your Character**: Upon starting the game, you will see a welcome screen where you can choose between characters.

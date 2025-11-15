@@ -4,10 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b6fe2ec1-679e-4a85-9075-d9a85d9d2638" name="Changes" comment="adding util">
+    <list default="true" id="b6fe2ec1-679e-4a85-9075-d9a85d9d2638" name="Changes" comment="separation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/Bert.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Bert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/IceTowerGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/IceTowerGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Game/BackgroundManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/BackgroundManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Game/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Game/IceTowerGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/IceTowerGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Game/InputHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/InputHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GameObjects/Bomb.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Bomb.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,6 +21,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -36,36 +41,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.IceTowerGame.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/user/IdeaProjects/IceTowerGame&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/user/IdeaProjects/IceTowerGame/src/Main.java&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.VCS&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.IceTowerGame.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/user/IdeaProjects/IceTowerGame",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "C:/Users/user/IdeaProjects/IceTowerGame/src/Main.java",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "reference.settingsdialog.IDE.editor.colors.VCS",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\user\IdeaProjects\IceTowerGame\src\util" />
     </key>
+    <key name="MoveMembersDialog.RECENTS_KEY">
+      <recent name="Game.Constants" />
+    </key>
   </component>
   <component name="RunManager" selected="Application.IceTowerGame">
     <configuration name="IceTowerGame" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="IceTowerGame" />
+      <option name="MAIN_CLASS_NAME" value="Game.IceTowerGame" />
       <module name="IceTowerGame" />
       <option name="VM_PARAMETERS" value="--module-path &quot;C:\Users\user\IdeaProjects\javafx-sdk-23\lib&quot; --add-modules javafx.controls,javafx.fxml " />
       <method v="2">
@@ -104,7 +113,13 @@
       <workItem from="1735301645587" duration="2247000" />
       <workItem from="1736174767645" duration="1345000" />
       <workItem from="1739711285025" duration="351000" />
-      <workItem from="1742846522195" duration="3447000" />
+      <workItem from="1742846522195" duration="4147000" />
+      <workItem from="1745347199464" duration="4060000" />
+      <workItem from="1756827549818" duration="5890000" />
+      <workItem from="1756905546595" duration="268000" />
+      <workItem from="1758479726568" duration="1190000" />
+      <workItem from="1762967057792" duration="157000" />
+      <workItem from="1763226744576" duration="7603000" />
     </task>
     <task id="LOCAL‎-00001" summary="start">
       <option name="closed" value="true" />
@@ -194,7 +209,15 @@
       <option name="project" value="LOCAL‎" />
       <updated>1728899711231</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL‎-00012" summary="separation">
+      <option name="closed" value="true" />
+      <created>1742850178768</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL‎-00012" />
+      <option name="project" value="LOCAL‎" />
+      <updated>1742850178768</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -232,6 +255,7 @@
     <MESSAGE value="adding start screen and bert" />
     <MESSAGE value="adding eric" />
     <MESSAGE value="adding util" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding util" />
+    <MESSAGE value="separation" />
+    <option name="LAST_COMMIT_MESSAGE" value="separation" />
   </component>
 </project>

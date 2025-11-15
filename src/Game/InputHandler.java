@@ -1,3 +1,5 @@
+package Game;
+
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import GameObjects.Player;
