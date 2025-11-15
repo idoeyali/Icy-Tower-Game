@@ -6,12 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b6fe2ec1-679e-4a85-9075-d9a85d9d2638" name="Changes" comment="separation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Game/BackgroundManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/BackgroundManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Game/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Game/IceTowerGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/IceTowerGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Game/InputHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Game/InputHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameObjects/Bomb.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameObjects/Bomb.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,7 +113,7 @@
       <workItem from="1756905546595" duration="268000" />
       <workItem from="1758479726568" duration="1190000" />
       <workItem from="1762967057792" duration="157000" />
-      <workItem from="1763226744576" duration="7603000" />
+      <workItem from="1763226744576" duration="8233000" />
     </task>
     <task id="LOCAL‎-00001" summary="start">
       <option name="closed" value="true" />
