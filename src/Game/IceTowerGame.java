@@ -1,3 +1,4 @@
+
 import GameObjects.Platform;
 import GameObjects.Player;
 import GameObjects.PlayerFactory;
@@ -292,6 +293,10 @@ public class IceTowerGame extends Application {
             player.setOnGround(false);
             player.applyGravity(); // Apply gravity if falling
         }
+    }
+
+    public void addScore(int amount){
+        score += amount;
     }
 
     /**
